@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Home View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="homeViewController" id="Y6W-OH-hqX" customClass="HomeViewController" customModule="Headhunt_helper" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADHUNT HELPER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pkU-S0-pXr">
+                                <rect key="frame" x="0.0" y="54" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Jqq-5y-6YJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="38"/>
+                                <color key="textColor" systemColor="systemMintColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="osd-7B-O2J">
+                                <rect key="frame" x="41.5" y="124" width="331" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Ivn-cU-gQM"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="My CV"/>
+                                    <segment title="All CV"/>
+                                </segments>
+                                <connections>
+                                    <action selector="onChangeSheetViewType:" destination="Y6W-OH-hqX" eventType="valueChanged" id="SoU-mb-qK0"/>
+                                </connections>
+                            </segmentedControl>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="aNp-dL-ryE">
+                                <rect key="frame" x="20" y="225" width="374" height="671"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="MFE-Mr-hDD">
+                                <rect key="frame" x="20" y="174" width="374" height="51"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pkU-S0-pXr" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="8YF-e9-4ta"/>
+                            <constraint firstItem="osd-7B-O2J" firstAttribute="top" secondItem="pkU-S0-pXr" secondAttribute="bottom" constant="20" id="ALT-MR-nZF"/>
+                            <constraint firstItem="aNp-dL-ryE" firstAttribute="top" secondItem="MFE-Mr-hDD" secondAttribute="bottom" id="IR5-UO-uWR"/>
+                            <constraint firstItem="osd-7B-O2J" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="OQA-ml-40H"/>
+                            <constraint firstItem="osd-7B-O2J" firstAttribute="width" secondItem="5EZ-qb-Rvc" secondAttribute="width" multiplier="0.8" id="RYL-oU-1cI"/>
+                            <constraint firstItem="MFE-Mr-hDD" firstAttribute="top" secondItem="osd-7B-O2J" secondAttribute="bottom" constant="10" id="RYh-dC-4VS"/>
+                            <constraint firstAttribute="trailing" secondItem="aNp-dL-ryE" secondAttribute="trailing" constant="20" id="T88-zz-o35"/>
+                            <constraint firstAttribute="bottom" secondItem="aNp-dL-ryE" secondAttribute="bottom" id="U07-US-lGq"/>
+                            <constraint firstAttribute="trailing" secondItem="pkU-S0-pXr" secondAttribute="trailing" id="Wex-Oi-vre"/>
+                            <constraint firstItem="aNp-dL-ryE" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="YAp-Uv-Cet"/>
+                            <constraint firstItem="pkU-S0-pXr" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="gBU-cl-5ZZ"/>
+                            <constraint firstAttribute="trailing" secondItem="MFE-Mr-hDD" secondAttribute="trailing" constant="20" id="qgv-IN-aLu"/>
+                            <constraint firstItem="MFE-Mr-hDD" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="qu1-JT-aZf"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cvSearchBar" destination="MFE-Mr-hDD" id="0Mg-2g-6jH"/>
+                        <outlet property="cvSegmentController" destination="osd-7B-O2J" id="Kqk-P9-FHJ"/>
+                        <outlet property="cvTableView" destination="aNp-dL-ryE" id="HVc-yR-o1H"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-23.188405797101453" y="128.57142857142856"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemMintColor">
+            <color red="0.0" green="0.7803921568627451" blue="0.74509803921568629" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
