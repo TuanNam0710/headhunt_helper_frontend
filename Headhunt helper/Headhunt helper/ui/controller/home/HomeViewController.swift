@@ -42,6 +42,8 @@ class HomeViewController: UIViewController {
             cvTableView.reloadData()
         }
     }
+    private var recruitersList: [RecruiterInfo] = []
+    private var departmentList: [Department] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +52,9 @@ class HomeViewController: UIViewController {
         setupSegmentControl()
         cvSearchBar.delegate = self
         initFlickToReloadData()
-        isShowingAll = cvSegmentController.selectedSegmentIndex == 1
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.cvTableView.reloadData()
+        }
     }
     
     private func bindModel() {
@@ -76,6 +80,7 @@ class HomeViewController: UIViewController {
             mSelf.refreshControl.endRefreshing()
             mSelf.cvListAll = cvList
             mSelf.viewModel.input.getMyCV.value = Void()
+            mSelf.isShowingAll = mSelf.cvSegmentController.selectedSegmentIndex == 1
             mSelf.cvTableView.reloadData()
         }
         viewModel.output.getAllCVFailed.addObserver { [weak self] _ in
@@ -94,8 +99,44 @@ class HomeViewController: UIViewController {
             mSelf.cvListMyself = mSelf.cvListAll?.filter { $0.idRecruiter == myId }
             mSelf.cvTableView.reloadData()
         }
+        viewModel.output.requestLogoutSuccess.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            UserDefaults.standard.set(nil, forKey: kUserId)
+            mSelf.secureDataHelper.saveUserInfo(name: kEmptyStr, email: kEmptyStr)
+            let alert = UIAlertController(title: "Success!", message: "Logout success", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+                alert.dismiss(animated: true) {
+                    mSelf.performSegue(withIdentifier: "backLogin", sender: mSelf)
+                }
+            }
+            alert.addAction(action)
+            mSelf.present(alert, animated: true)
+        }
+        viewModel.output.requestLogoutFailed.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            let alert = UIAlertController(title: "Error!", message: "Cannot logout", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+                alert.dismiss(animated: true)
+            }
+            alert.addAction(action)
+            mSelf.present(alert, animated: true)
+        }
+        viewModel.output.requestAllRecruitersSuccess.addObserver { [weak self] recruiterList in
+            guard let mSelf = self else { return }
+            if let recruiterList = recruiterList {
+                mSelf.recruitersList = recruiterList
+            }
+        }
+        viewModel.output.requestAllDeptsSuccess.addObserver { [weak self] departmentList in
+            guard let mSelf = self else { return }
+            if let departmentList = departmentList {
+                mSelf.departmentList = departmentList
+            }
+        }
         viewModel.input.getUserInfo.value = userEmail
         viewModel.input.getAllCV.value = Void()
+        viewModel.input.requestAllRecruiters.value = Void()
+        viewModel.input.requestAllDepts.value = Void()
     }
     
     private func setupTableView() {
@@ -127,6 +168,11 @@ class HomeViewController: UIViewController {
         let currentText = currentSearchText
         currentSearchText = currentText
     }
+    
+    @IBAction private func onLogout(_ sender: UIButton) {
+        let id = sharedPreference.getInt(key: kUserId)
+        viewModel.input.requestLogout.value = "\(id)"
+    }
 }
 
 extension HomeViewController: UISearchBarDelegate {
@@ -138,6 +184,10 @@ extension HomeViewController: UISearchBarDelegate {
                 currentSearchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
             }
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 }
 
@@ -159,5 +209,17 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.setupData(info: cvInfo)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailStoryboard = UIStoryboard(name: "Detail", bundle: nil)
+        let detailViewController = detailStoryboard.instantiateViewController(withIdentifier: "detailViewController") as? DetailViewController
+        if let detailViewController = detailViewController {
+            detailViewController.recruiterList = self.recruitersList
+            detailViewController.departmentList = self.departmentList
+            detailViewController.idCV = indexPath.row + 1
+            detailViewController.modalPresentationStyle = .fullScreen
+            self.present(detailViewController, animated: true)
+        }
     }
 }
