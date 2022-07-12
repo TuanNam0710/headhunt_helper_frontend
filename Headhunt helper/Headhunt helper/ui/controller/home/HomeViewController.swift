@@ -11,6 +11,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var cvSegmentController: UISegmentedControl!
     @IBOutlet private weak var cvSearchBar: UISearchBar!
     @IBOutlet private weak var cvTableView: UITableView!
+    @IBOutlet private weak var greetingsLabel: UILabel!
     private let viewModel = HomeViewModel()
     private let secureDataHelper = SecureDataHelper.shared
     private let sharedPreference = SharedPreference.shared
@@ -45,9 +46,13 @@ class HomeViewController: UIViewController {
     private var recruitersList: [RecruiterInfo] = []
     private var departmentList: [Department] = []
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        bindModel()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindModel()
         setupTableView()
         setupSegmentControl()
         cvSearchBar.delegate = self
@@ -62,6 +67,7 @@ class HomeViewController: UIViewController {
         viewModel.output.getUserInfoSuccess.addObserver { [weak self] recruiterInfo in
             guard let mSelf = self else { return }
             if let userId = recruiterInfo?.id, let name = recruiterInfo?.name, let email = recruiterInfo?.email {
+                mSelf.greetingsLabel.text = "Hi, " + name
                 mSelf.secureDataHelper.saveUserInfo(name: name, email: email)
                 mSelf.sharedPreference.putInt(key: kUserId, value: userId)
             }

@@ -43,6 +43,12 @@ class DetailViewController: UIViewController {
     private var cvSkill: [CVSkills]?
     private var cvWorkExperience: [CVWorkExperience]?
     private var cvAdditionalInfo: [CVAdditionalInfo]?
+    private var assignRecruiterFlag = false
+    private var assignDeptFlag = false
+    private var updateStatusFlag = false
+    private var currentSelectRecruiterId: Int?
+    private var currentSelectDeptId: Int?
+    private var currentSelectStatus: Int?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,6 +75,7 @@ class DetailViewController: UIViewController {
             guard let mSelf = self else { return }
             mSelf.cvBasicInfo = cvBasicInfo
             mSelf.detailTableView.reloadData()
+            mSelf.setupViews()
         }
         viewModel.output.requestGetCVSkillsSuccess.addObserver { [weak self] cvSkill in
             guard let mSelf = self else { return }
@@ -84,6 +91,21 @@ class DetailViewController: UIViewController {
             guard let mSelf = self else { return }
             mSelf.cvAdditionalInfo = cvAdditionalInfo
             mSelf.detailTableView.reloadData()
+        }
+        viewModel.output.requestAssignCVRecruiterSuccess.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            mSelf.assignRecruiterFlag = true
+            mSelf.didFinishLoadAPISave()
+        }
+        viewModel.output.requestAssignCVDeptSuccess.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            mSelf.assignDeptFlag = true
+            mSelf.didFinishLoadAPISave()
+        }
+        viewModel.output.requestUpdateCVStatusSuccess.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            mSelf.updateStatusFlag = true
+            mSelf.didFinishLoadAPISave()
         }
         viewModel.input.requestGetCVBasicInfo.value = "\(idCV)"
         viewModel.input.requestGetCVSkills.value = "\(idCV)"
@@ -125,7 +147,8 @@ class DetailViewController: UIViewController {
         assignToHRDD.anchorView = assignToHRButton
         assignToHRDD.dataSource = hrDataSource
         assignToHRDD.dismissMode = .automatic
-        assignToHRDD.selectionAction = { [unowned self] (_, item: String) in
+        assignToHRDD.selectionAction = { [unowned self] (index: Int, item: String) in
+            self.currentSelectRecruiterId = recruiterList[index].id
             self.assignToHRButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
@@ -133,7 +156,8 @@ class DetailViewController: UIViewController {
         assignToDeptDD.anchorView = assignToDeptButton
         assignToDeptDD.dataSource = deptDataSource
         assignToDeptDD.dismissMode = .automatic
-        assignToDeptDD.selectionAction = { [unowned self] (_, item: String) in
+        assignToDeptDD.selectionAction = { [unowned self] (index: Int, item: String) in
+            self.currentSelectDeptId = departmentList[index].id
             self.assignToDeptButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
@@ -141,10 +165,32 @@ class DetailViewController: UIViewController {
         changeStatusDD.anchorView = changeStatusButton
         changeStatusDD.dataSource = statusDataSource
         changeStatusDD.dismissMode = .automatic
-        changeStatusDD.selectionAction = { [unowned self] (_, item: String) in
+        changeStatusDD.selectionAction = { [unowned self] (index: Int, item: String) in
+            self.currentSelectStatus = index
             self.changeStatusButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
+    }
+    
+    private func setupViews() {
+        for index in 0 ..< recruiterList.count {
+            if recruiterList[index].id == cvBasicInfo?.idRecruiter {
+                assignToHRButton.setTitle(recruiterList[index].name, for: .normal)
+                currentSelectRecruiterId = recruiterList[index].id
+            }
+        }
+        for index in 0 ..< departmentList.count {
+            if departmentList[index].id == cvBasicInfo?.idDepartment {
+                assignToDeptButton.setTitle(departmentList[index].name, for: .normal)
+                currentSelectDeptId = departmentList[index].id
+            }
+        }
+        if let cvBasicInfo = cvBasicInfo {
+            changeStatusButton.setTitle(statusDataSource[cvBasicInfo.status], for: .normal)
+            currentSelectStatus = cvBasicInfo.status
+        }
+        cvMail = cvBasicInfo?.email ?? kEmptyStr
+        cvPhone = cvBasicInfo?.phone ?? kEmptyStr
     }
     
     @IBAction private func onBack(_ sender: UIButton) {
@@ -190,6 +236,28 @@ class DetailViewController: UIViewController {
     
     @IBAction private func onChangeStatus(_ sender: UIButton) {
         changeStatusDD.show()
+    }
+    
+    @IBAction private func onSave(_ sender: UIButton) {
+        if let currentSelectRecruiterId = currentSelectRecruiterId,
+           let currentSelectDeptId = currentSelectDeptId,
+           let currentSelectStatus = currentSelectStatus {
+            viewModel.input.requestAssignCVRecruiter.value = ("\(idCV)", "\(currentSelectRecruiterId)")
+            viewModel.input.requestAssignCVDept.value = ("\(idCV)", "\(currentSelectDeptId)")
+            viewModel.input.requestUpdateCVStatus.value = ("\(idCV)", "\(currentSelectStatus)")
+        }
+    }
+    
+    private func didFinishLoadAPISave() {
+        if assignRecruiterFlag && assignDeptFlag && updateStatusFlag {
+            let alert = UIAlertController(title: "Success!", message: "Update CV successfully", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                guard let mSelf = self else { return }
+                mSelf.dismiss(animated: true)
+            }
+            alert.addAction(action)
+            self.present(alert, animated: true)
+        }
     }
 }
 

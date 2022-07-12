@@ -19,8 +19,21 @@ enum APIEndpoint: String {
     case cvSkills = "/cv/skills/"
     case cvWorkExperience = "/cv/workExperience/"
     case cvAdditionalInfo = "/cv/additionalInfo/"
+    case assignAndUpdate = "/cv/"
     
     func getURL() -> String {
         return kBaseAPI + self.rawValue
+    }
+    
+    func getURLAssignToDept(id1: String, id2: String) -> String {
+        return kBaseAPI + self.rawValue + id1 + "/assignToDept/" + id2
+    }
+    
+    func getURLAssignToRecruiter(id1: String, id2: String) -> String {
+        return kBaseAPI + self.rawValue + id1 + "/assignToRecruiter/" + id2
+    }
+    
+    func getURLUpdateCVStatus(id1: String, status: String) -> String {
+        return kBaseAPI + self.rawValue + id1 + "/updateCVStatus/" + status
     }
 }

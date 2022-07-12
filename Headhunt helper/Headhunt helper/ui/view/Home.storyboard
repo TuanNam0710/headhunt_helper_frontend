@@ -48,7 +48,8 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QGo-qj-q64">
-                                <rect key="frame" x="20" y="104" width="57" height="45"/>
+                                <rect key="frame" x="20" y="104" width="54" height="45"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Logout">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -57,10 +58,18 @@
                                     <action selector="onLogout:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="tGz-yb-2NZ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi," textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rv-78-m5n">
+                                <rect key="frame" x="373" y="104" width="21" height="45"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="2rv-78-m5n" secondAttribute="trailing" constant="20" id="111-wc-28J"/>
+                            <constraint firstItem="osd-7B-O2J" firstAttribute="top" secondItem="2rv-78-m5n" secondAttribute="bottom" id="5Fq-jY-AdY"/>
                             <constraint firstItem="pkU-S0-pXr" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="8YF-e9-4ta"/>
                             <constraint firstItem="osd-7B-O2J" firstAttribute="top" secondItem="pkU-S0-pXr" secondAttribute="bottom" constant="45" id="ALT-MR-nZF"/>
                             <constraint firstItem="osd-7B-O2J" firstAttribute="top" secondItem="QGo-qj-q64" secondAttribute="bottom" id="Dw0-4h-OAh"/>
@@ -72,6 +81,7 @@
                             <constraint firstAttribute="bottom" secondItem="aNp-dL-ryE" secondAttribute="bottom" id="U07-US-lGq"/>
                             <constraint firstAttribute="trailing" secondItem="pkU-S0-pXr" secondAttribute="trailing" id="Wex-Oi-vre"/>
                             <constraint firstItem="aNp-dL-ryE" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="YAp-Uv-Cet"/>
+                            <constraint firstItem="2rv-78-m5n" firstAttribute="top" secondItem="pkU-S0-pXr" secondAttribute="bottom" id="fEb-sx-yaH"/>
                             <constraint firstItem="pkU-S0-pXr" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="gBU-cl-5ZZ"/>
                             <constraint firstItem="QGo-qj-q64" firstAttribute="top" secondItem="pkU-S0-pXr" secondAttribute="bottom" id="jYL-kM-MIa"/>
                             <constraint firstAttribute="trailing" secondItem="MFE-Mr-hDD" secondAttribute="trailing" constant="20" id="qgv-IN-aLu"/>
@@ -83,6 +93,7 @@
                         <outlet property="cvSearchBar" destination="MFE-Mr-hDD" id="0Mg-2g-6jH"/>
                         <outlet property="cvSegmentController" destination="osd-7B-O2J" id="Kqk-P9-FHJ"/>
                         <outlet property="cvTableView" destination="aNp-dL-ryE" id="HVc-yR-o1H"/>
+                        <outlet property="greetingsLabel" destination="2rv-78-m5n" id="TXZ-AH-CAP"/>
                         <segue destination="ht1-Ap-P08" kind="unwind" identifier="backLogin" unwindAction="unwindToLoginWithSegue:" id="MTc-AG-x2W"/>
                     </connections>
                 </viewController>

@@ -15,6 +15,9 @@ class DetailViewModel {
         let requestGetCVSkills = ValueTrigger<String>(kEmptyStr)
         let requestGetCVWorkExperience = ValueTrigger<String>(kEmptyStr)
         let requestGetCVAdditionalInfo = ValueTrigger<String>(kEmptyStr)
+        let requestAssignCVDept = ValueTrigger<(String, String)>((kEmptyStr, kEmptyStr))
+        let requestAssignCVRecruiter = ValueTrigger<(String, String)>((kEmptyStr, kEmptyStr))
+        let requestUpdateCVStatus = ValueTrigger<(String, String)>((kEmptyStr, kEmptyStr))
     }
     
     struct Output {
@@ -26,6 +29,12 @@ class DetailViewModel {
         let requestGetCVWorkExperienceFailed = ValueTrigger<Void>(Void())
         let requestGetCVAdditionalInfoSuccess = ValueTrigger<[CVAdditionalInfo]?>(nil)
         let requestGetCVAdditionalInfoFailed = ValueTrigger<Void>(Void())
+        let requestAssignCVDeptSuccess = ValueTrigger<Void>(Void())
+        let requestAssignCVDeptFailed = ValueTrigger<Void>(Void())
+        let requestAssignCVRecruiterSuccess = ValueTrigger<Void>(Void())
+        let requestAssignCVRecruiterFailed = ValueTrigger<Void>(Void())
+        let requestUpdateCVStatusSuccess = ValueTrigger<Void>(Void())
+        let requestUpdateCVStatusFailed = ValueTrigger<Void>(Void())
     }
     
     let input = Input()
@@ -47,6 +56,18 @@ class DetailViewModel {
         input.requestGetCVAdditionalInfo.addObserver { [weak self] id in
             guard let mSelf = self else { return }
             mSelf.getCVAdditionalInfo(id: id)
+        }
+        input.requestAssignCVDept.addObserver { [weak self] id, idDepartment in
+            guard let mSelf = self else { return }
+            mSelf.assignCVToDept(id: id, idDepartment: idDepartment)
+        }
+        input.requestAssignCVRecruiter.addObserver { [weak self] id, idRecruiter in
+            guard let mSelf = self else { return }
+            mSelf.assignCVToRecruiter(id: id, idRecruiter: idRecruiter)
+        }
+        input.requestUpdateCVStatus.addObserver { [weak self] id, status in
+            guard let mSelf = self else { return }
+            mSelf.updateCVStatus(id: id, status: status)
         }
     }
     
@@ -90,6 +111,45 @@ class DetailViewModel {
                 mSelf.output.requestGetCVAdditionalInfoSuccess.value = additionalInfoList
             } else {
                 mSelf.output.requestGetCVAdditionalInfoFailed.value = Void()
+            }
+        }
+    }
+    
+    private func assignCVToDept(id: String, idDepartment: String) {
+        apiServices.requestAssignCVToDepartment(id: id,
+                                                idDepartment: idDepartment) { [weak self] result in
+            guard let mSelf = self else { return }
+            switch result {
+            case.success:
+                mSelf.output.requestAssignCVDeptSuccess.value = Void()
+            case .failure:
+                mSelf.output.requestAssignCVDeptFailed.value = Void()
+            }
+        }
+    }
+    
+    private func assignCVToRecruiter(id: String, idRecruiter: String) {
+        apiServices.requestAssignCVToRecruiter(id: id,
+                                               idRecruiter: idRecruiter) { [weak self] result in
+            guard let mSelf = self else { return }
+            switch result {
+            case .success:
+                mSelf.output.requestAssignCVRecruiterSuccess.value = Void()
+            case .failure:
+                mSelf.output.requestAssignCVRecruiterFailed.value = Void()
+            }
+        }
+    }
+    
+    private func updateCVStatus(id: String, status: String) {
+        apiServices.requestUpdateCVStatus(id: id,
+                                          status: status) { [weak self] result in
+            guard let mSelf = self else { return }
+            switch result {
+            case .success:
+                mSelf.output.requestUpdateCVStatusSuccess.value = Void()
+            case .failure:
+                mSelf.output.requestUpdateCVStatusFailed.value = Void()
             }
         }
     }
