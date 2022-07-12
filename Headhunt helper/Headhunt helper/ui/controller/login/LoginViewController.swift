@@ -20,12 +20,6 @@ class LoginViewController: UIViewController {
         passwordTextField.delegate = self
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        emailTextField.text = kEmptyStr
-        passwordTextField.text = kEmptyStr
-    }
-    
     private func bindModel() {
         viewModel.transform()
         viewModel.output.requestLoginSuccess.addObserver { [weak self] in
@@ -55,8 +49,6 @@ class LoginViewController: UIViewController {
             mSelf.present(alert, animated: true)
         }
     }
-    
-    @IBAction func unwindToLogin(segue: UIStoryboardSegue) {}
     
     @IBAction private func onLogin(_ sender: UIButton) {
         if let email = emailTextField.text,

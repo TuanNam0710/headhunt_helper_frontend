@@ -14,9 +14,6 @@ class HomeViewModel {
         let getUserInfo = ValueTrigger<String>(kEmptyStr)
         let getAllCV = ValueTrigger<Void>(Void())
         let getMyCV = ValueTrigger<Void>(Void())
-        let requestLogout = ValueTrigger<String>(kEmptyStr)
-        let requestAllRecruiters = ValueTrigger<Void>(Void())
-        let requestAllDepts = ValueTrigger<Void>(Void())
     }
     
     struct Output {
@@ -25,10 +22,6 @@ class HomeViewModel {
         let getAllCVSuccess = ValueTrigger<[CVInfo]?>(nil)
         let getAllCVFailed = ValueTrigger<Error?>(nil)
         let getMyCVSuccess = ValueTrigger<Void>(Void())
-        let requestLogoutSuccess = ValueTrigger<Void>(Void())
-        let requestLogoutFailed = ValueTrigger<Void>(Void())
-        let requestAllRecruitersSuccess = ValueTrigger<[RecruiterInfo]?>(nil)
-        let requestAllDeptsSuccess = ValueTrigger<[Department]?>(nil)
     }
     
     let input = Input()
@@ -46,18 +39,6 @@ class HomeViewModel {
         input.getMyCV.addObserver { [weak self] in
             guard let mSelf = self else { return }
             mSelf.getMyCV()
-        }
-        input.requestLogout.addObserver { [weak self] id in
-            guard let mSelf = self else { return }
-            mSelf.logout(id: id)
-        }
-        input.requestAllRecruiters.addObserver { [weak self] in
-            guard let mSelf = self else { return }
-            mSelf.getAllRecruiters()
-        }
-        input.requestAllDepts.addObserver { [weak self] in
-            guard let mSelf = self else { return }
-            mSelf.getAllDepts()
         }
     }
     
@@ -85,35 +66,5 @@ class HomeViewModel {
     
     private func getMyCV() {
         output.getMyCVSuccess.value = Void()
-    }
-    
-    private func logout(id: String) {
-        apiServices.requestLogout(id: id) { [weak self] result in
-            guard let mSelf = self else { return }
-            switch result {
-            case.success:
-                mSelf.output.requestLogoutSuccess.value = Void()
-            case .failure:
-                mSelf.output.requestLogoutFailed.value = Void()
-            }
-        }
-    }
-    
-    private func getAllRecruiters() {
-        apiServices.requestAllRecruiters { [weak self] recruiterList, error in
-            guard let mSelf = self else { return }
-            if error == nil {
-                mSelf.output.requestAllRecruitersSuccess.value = recruiterList
-            }
-        }
-    }
-    
-    private func getAllDepts() {
-        apiServices.requestAllDepts { [weak self] departmentList, error in
-            guard let mSelf = self else { return }
-            if error == nil {
-                mSelf.output.requestAllDeptsSuccess.value = departmentList
-            }
-        }
     }
 }

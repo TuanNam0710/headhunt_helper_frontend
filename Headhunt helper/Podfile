@@ -7,6 +7,5 @@ target 'Headhunt helper' do
 
   # Pods for Headhunt helper
   pod 'Alamofire'
-  pod 'DropDown'
 
 end
