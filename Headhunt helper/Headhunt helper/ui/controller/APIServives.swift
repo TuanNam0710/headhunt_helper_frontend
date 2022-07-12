@@ -245,4 +245,25 @@ class APIServices: HTTPRequester {
             }
         }
     }
+    
+    func requestAssignCVToDepartment(id: String, idDepartment: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
+        request(APIEndpoint.assignAndUpdate.getURLAssignToDept(id1: id, id2: idDepartment),
+                method: .post) { response in
+            completionHandler(response.result)
+        }
+    }
+    
+    func requestAssignCVToRecruiter(id: String, idRecruiter: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
+        request(APIEndpoint.assignAndUpdate.getURLAssignToRecruiter(id1: id, id2: idRecruiter),
+                method: .post) { response in
+            completionHandler(response.result)
+        }
+    }
+    
+    func requestUpdateCVStatus(id: String, status: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
+        request(APIEndpoint.assignAndUpdate.getURLUpdateCVStatus(id1: id, status: status),
+                method: .post) { response in
+            completionHandler(response.result)
+        }
+    }
 }
