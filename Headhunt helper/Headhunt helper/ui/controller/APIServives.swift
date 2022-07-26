@@ -19,15 +19,22 @@ class APIServices: HTTPRequester {
         request(APIEndpoint.login.getURL(),
                 method: .post,
                 parameters: parameters) { response in
+            if let data = response.value as? [String: String] {
+                if let currentDept = data["idDepartment"] {
+                    SharedPreference.shared.putString(key: kCurrentDept, value: currentDept)
+                }
+            }
             completionHandler(response.result)
         }
     }
     
-    func requestRegister(name: String, email: String, password: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
+    func requestRegister(name: String, email: String, password: String, idDept: Int, role: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
         let parameters: [String: Any] = [
             "name": name,
             "email": email,
-            "password": password
+            "password": password,
+            "idDepartment": idDept,
+            "role": role
         ]
         request(APIEndpoint.register.getURL(),
                 method: .post,

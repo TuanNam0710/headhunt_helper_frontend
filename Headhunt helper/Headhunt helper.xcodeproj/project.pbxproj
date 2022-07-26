@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1B5F49C60C49A42CE7D290CF /* Pods_Headhunt_helper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 557BF297B16AC2A6A8C7FD7E /* Pods_Headhunt_helper.framework */; };
+		C426FC0928904B1900E2EAE8 /* HomeJDViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C426FC0828904B1900E2EAE8 /* HomeJDViewController.swift */; };
+		C426FC0B2890586F00E2EAE8 /* NewRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C426FC0A2890586F00E2EAE8 /* NewRequestViewController.swift */; };
 		C4814F98287839C0006B9197 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4814F97287839C0006B9197 /* AppDelegate.swift */; };
 		C4814FA1287839C2006B9197 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4814FA0287839C2006B9197 /* Assets.xcassets */; };
 		C4814FA4287839C2006B9197 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4814FA2287839C2006B9197 /* LaunchScreen.storyboard */; };
@@ -48,6 +50,8 @@
 		3A1835587B42D38A53D1E20A /* Pods-Headhunt helper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Headhunt helper.debug.xcconfig"; path = "Target Support Files/Pods-Headhunt helper/Pods-Headhunt helper.debug.xcconfig"; sourceTree = "<group>"; };
 		52206F83064EB4AC76616308 /* Pods-Headhunt helper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Headhunt helper.release.xcconfig"; path = "Target Support Files/Pods-Headhunt helper/Pods-Headhunt helper.release.xcconfig"; sourceTree = "<group>"; };
 		557BF297B16AC2A6A8C7FD7E /* Pods_Headhunt_helper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Headhunt_helper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C426FC0828904B1900E2EAE8 /* HomeJDViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeJDViewController.swift; sourceTree = "<group>"; };
+		C426FC0A2890586F00E2EAE8 /* NewRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRequestViewController.swift; sourceTree = "<group>"; };
 		C4814F94287839C0006B9197 /* Headhunt helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Headhunt helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4814F97287839C0006B9197 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4814FA0287839C2006B9197 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 				C49191C0287B421300D98A14 /* commonViews */,
 				C49191B5287A114700D98A14 /* HomeViewController.swift */,
 				C49191B7287A115100D98A14 /* HomeViewModel.swift */,
+				C426FC0828904B1900E2EAE8 /* HomeJDViewController.swift */,
+				C426FC0A2890586F00E2EAE8 /* NewRequestViewController.swift */,
 			);
 			path = home;
 			sourceTree = "<group>";
@@ -462,9 +468,11 @@
 				C4814FBA28783CFF006B9197 /* SharedPreference.swift in Sources */,
 				C49191AF2879F19A00D98A14 /* RegisterViewController.swift in Sources */,
 				C4814FC328783D1D006B9197 /* KeychainManager.swift in Sources */,
+				C426FC0928904B1900E2EAE8 /* HomeJDViewController.swift in Sources */,
 				C495D826287BEC0300B02E94 /* CVWorkExperience.swift in Sources */,
 				C4814FC92878406B006B9197 /* AppConstant.swift in Sources */,
 				C495D828287BECED00B02E94 /* CVAdditionalInfo.swift in Sources */,
+				C426FC0B2890586F00E2EAE8 /* NewRequestViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

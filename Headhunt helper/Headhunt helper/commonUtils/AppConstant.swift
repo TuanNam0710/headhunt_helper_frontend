@@ -9,7 +9,7 @@ import Foundation
 
 // Constant to avoid hard code
 let kEmptyStr = ""
-let kBaseAPI = "https://9f84-101-99-14-221.ap.ngrok.io"
+let kBaseAPI = "https://1189-101-99-15-6.ap.ngrok.io"
 
 
 let kUsername = "admin"
@@ -20,4 +20,4 @@ let kKeychainEmail = "email"
 let kUserId = "id"
 let kTelScheme = "tel:"
 let kMailScheme = "mailto:"
-
+let kCurrentDept = "currentDepartment"

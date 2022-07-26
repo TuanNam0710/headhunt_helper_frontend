@@ -14,7 +14,7 @@ enum APIEndpoint: String {
     case getAllCV = "/cv/all"
     case logout = "/logout"
     case allRecruiters = "/recruiters"
-    case allDepts = "/departments"
+    case allDepts = "/depts"
     case cvBasicInfo = "/cv/basicInfo/"
     case cvSkills = "/cv/skills/"
     case cvWorkExperience = "/cv/workExperience/"
