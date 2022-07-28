@@ -15,8 +15,8 @@ class HomeViewController: UIViewController {
     private let viewModel = HomeViewModel()
     private let secureDataHelper = SecureDataHelper.shared
     private let sharedPreference = SharedPreference.shared
-    var userEmail = kEmptyStr
     var refreshControl: UIRefreshControl!
+    private let currentRole = SharedPreference.shared.getString(key: kRole)
     private var cvListAll: [CVInfo]?
     private var cvListMyself: [CVInfo]?
     private var cvListShow: [CVInfo]? {
@@ -60,27 +60,11 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.cvTableView.reloadData()
         }
+        greetingsLabel.text = "Hi, \(SharedPreference.shared.getString(key: kKeychainName))"
     }
     
     private func bindModel() {
         viewModel.transform()
-        viewModel.output.getUserInfoSuccess.addObserver { [weak self] recruiterInfo in
-            guard let mSelf = self else { return }
-            if let userId = recruiterInfo?.id, let name = recruiterInfo?.name, let email = recruiterInfo?.email {
-                mSelf.greetingsLabel.text = "Hi, " + name
-                mSelf.secureDataHelper.saveUserInfo(name: name, email: email)
-                mSelf.sharedPreference.putInt(key: kUserId, value: userId)
-            }
-        }
-        viewModel.output.getUserInfoFailed.addObserver { [weak self] _ in
-            guard let mSelf = self else { return }
-            let alert = UIAlertController(title: "Error!", message: "Cannot get recruiter info", preferredStyle: .alert)
-            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
-                alert.dismiss(animated: true)
-            }
-            alert.addAction(action)
-            mSelf.present(alert, animated: true)
-        }
         viewModel.output.getAllCVSuccess.addObserver { [weak self] cvList in
             guard let mSelf = self else { return }
             mSelf.refreshControl.endRefreshing()
@@ -102,7 +86,11 @@ class HomeViewController: UIViewController {
         viewModel.output.getMyCVSuccess.addObserver { [weak self] in
             guard let mSelf = self else { return }
             let myId = mSelf.sharedPreference.getInt(key: kUserId)
-            mSelf.cvListMyself = mSelf.cvListAll?.filter { $0.idRecruiter == myId }
+            if mSelf.currentRole == "Recruiter" {
+                mSelf.cvListMyself = mSelf.cvListAll?.filter { $0.idRecruiter == myId }
+            } else {
+                mSelf.cvListMyself = mSelf.cvListAll?.filter { "\($0.idDepartment ?? -1)" == mSelf.sharedPreference.getString(key: kCurrentDept)}
+            }
             mSelf.cvTableView.reloadData()
         }
         viewModel.output.requestLogoutSuccess.addObserver { [weak self] in
@@ -139,7 +127,6 @@ class HomeViewController: UIViewController {
                 mSelf.departmentList = departmentList
             }
         }
-        viewModel.input.getUserInfo.value = userEmail
         viewModel.input.getAllCV.value = Void()
         viewModel.input.requestAllRecruiters.value = Void()
         viewModel.input.requestAllDepts.value = Void()
@@ -178,6 +165,14 @@ class HomeViewController: UIViewController {
     @IBAction private func onLogout(_ sender: UIButton) {
         let id = sharedPreference.getInt(key: kUserId)
         viewModel.input.requestLogout.value = "\(id)"
+    }
+    
+    @IBAction private func onSelectRecruitmentPlan(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+        if let viewController = storyboard.instantiateViewController(withIdentifier: "homeJDViewController") as? HomeJDViewController {
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: false)
+        }
     }
 }
 
@@ -223,7 +218,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         if let detailViewController = detailViewController {
             detailViewController.recruiterList = self.recruitersList
             detailViewController.departmentList = self.departmentList
-            detailViewController.idCV = indexPath.row + 1
+            detailViewController.idCV = cvListShow?[indexPath.row].id ?? -1
             detailViewController.modalPresentationStyle = .fullScreen
             self.present(detailViewController, animated: true)
         }

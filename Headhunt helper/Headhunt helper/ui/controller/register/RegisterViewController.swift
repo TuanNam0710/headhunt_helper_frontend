@@ -18,6 +18,7 @@ class RegisterViewController: UIViewController {
     private let departmentDropdown = DropDown()
     private var deptDataSource: [String] = []
     private var currentDepartment: Int?
+    private var role = "Manager"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,9 @@ class RegisterViewController: UIViewController {
         departmentDropdown.anchorView = departmentButton
         departmentDropdown.selectionAction = { (index: Int, itemName: String) in
             self.departmentButton.setTitle(itemName, for: .normal)
+            if itemName == "Human Resources Dept" {
+                self.role = "Recruiter"
+            }
             self.currentDepartment = index + 1
         }
     }
@@ -77,10 +81,6 @@ class RegisterViewController: UIViewController {
            let retypePassword = retypePasswordTextField.text,
            validateField(password, retypePassword),
            let currentDepartment = currentDepartment {
-            var role = "Manager"
-            if deptDataSource[currentDepartment] == "Human Resources Dept" {
-                role = "Recruiter"
-            }
             viewModel.input.requestRegister.value = (name, email, password, currentDepartment, role)
         } else {
             let alert = UIAlertController(title: "Error!", message: "Please enter again", preferredStyle: .alert)
