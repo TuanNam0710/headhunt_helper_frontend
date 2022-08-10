@@ -9,6 +9,7 @@ import UIKit
 
 struct RecruiterInfo: Decodable {
     var id: Int
+    var idDepartment: Int
     var name: String
     var email: String
     var password: String

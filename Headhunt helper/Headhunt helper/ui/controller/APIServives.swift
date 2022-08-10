@@ -19,41 +19,30 @@ class APIServices: HTTPRequester {
         request(APIEndpoint.login.getURL(),
                 method: .post,
                 parameters: parameters) { response in
+            if let data = response.value as? [String: Any] {
+                if let currentDept = data["idDepartment"] as? Int {
+                    SharedPreference.shared.putString(key: kCurrentDept, value: "\(currentDept)")
+                    SharedPreference.shared.putString(key: kUserId, value: "\(data["id"] as! Int)")
+                    SharedPreference.shared.putString(key: kKeychainName, value: data["name"] as! String)
+                    SharedPreference.shared.putString(key: kRole, value: data["role"] as! String)
+                }
+            }
             completionHandler(response.result)
         }
     }
     
-    func requestRegister(name: String, email: String, password: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
+    func requestRegister(name: String, email: String, password: String, idDept: Int, role: String, completionHandler: @escaping (Result<Any, AFError>) -> Void) {
         let parameters: [String: Any] = [
             "name": name,
             "email": email,
-            "password": password
+            "password": password,
+            "idDepartment": idDept,
+            "role": role
         ]
         request(APIEndpoint.register.getURL(),
                 method: .post,
                 parameters: parameters) { response in
             completionHandler(response.result)
-        }
-    }
-    
-    func requestUserInfo(email: String, completionHandler: @escaping (RecruiterInfo?, Error?) -> Void) {
-        let url = APIEndpoint.getUserInfo.getURL() + email
-        request(url,
-                method: .get) { response in
-            switch response.result {
-            case .success(_):
-                if let data = response.value as? [String: Any] {
-                    let recruiterInfo = RecruiterInfo(id: data["id"] as! Int,
-                                                      name: data["name"] as! String,
-                                                      email: data["email"] as! String,
-                                                      password: data["password"] as! String)
-                    completionHandler(recruiterInfo, nil)
-                } else {
-                    completionHandler(nil, nil)
-                }
-            case .failure(_):
-                completionHandler(nil, response.error)
-            }
         }
     }
     
@@ -106,6 +95,7 @@ class APIServices: HTTPRequester {
                     var recruiterList: [RecruiterInfo] = []
                     for index in data {
                         let recruiterInfo = RecruiterInfo(id: index["id"] as! Int,
+                                                          idDepartment: index["idDepartment"] as! Int,
                                                           name: index["name"] as! String,
                                                           email: index["email"] as! String,
                                                           password: index["password"] as! String)
@@ -143,6 +133,121 @@ class APIServices: HTTPRequester {
         }
     }
     
+    func requestDetailCV(id: String, completionHandler: @escaping (CVDetail?, Error?) -> Void) {
+        let param: [String: Any] = [
+            "id": id
+        ]
+        request(APIEndpoint.cvDetail.getURL(), method: .post, parameters: param) { response in
+            switch response.result {
+            case .success:
+                if let data = try? JSONDecoder().decode(CVDetail.self, from: response.data!) {
+                    completionHandler(data, nil)
+                }
+            case .failure:
+                completionHandler(nil, response.error)
+            }
+        }
+    }
+    
+    func requestUpdateDetailCV(id: Int, idDepartment: Int, idRecruiter: Int, status: Int, completionHandler: @escaping (Error?) -> Void) {
+        let parameters: [String: Any] = [
+            "id": id,
+            "idDept": idDepartment,
+            "idRecruiter": idRecruiter,
+            "status": status
+        ]
+        request(APIEndpoint.updateCV.getURL(), method: .post, parameters: parameters) { response in
+            switch response.result {
+            case .success:
+                completionHandler(nil)
+            case .failure:
+                completionHandler(response.error)
+            }
+        }
+    }
+    
+    func requestJD(completionHandler: @escaping ([JobDescription]?, Error?) -> Void) {
+        request(APIEndpoint.jd.getURL(), method: .get) { response in
+            switch response.result {
+            case .success:
+                if let data = try? JSONDecoder().decode([JobDescription].self, from: response.data!) {
+                    completionHandler(data, nil)
+                } else {
+                    completionHandler([], nil)
+                }
+            case .failure:
+                completionHandler(nil, response.error)
+            }
+        }
+    }
+    
+    func requestPosition(completionHandler: @escaping ([Position]?, Error?) -> Void) {
+        let param: [String: Any] = [
+            "id": SharedPreference.shared.getString(key: kCurrentDept)
+        ]
+        request(APIEndpoint.position.getURL(), method: .post, parameters: param) { response in
+            switch response.result {
+            case .success:
+                if let data = try? JSONDecoder().decode([Position].self, from: response.data!) {
+                    completionHandler(data, nil)
+                } else {
+                    completionHandler([], nil)
+                }
+            case .failure:
+                completionHandler(nil, response.error)
+            }
+        }
+    }
+    
+    func requestDeleteJD(id: Int, completionHandler: @escaping (Error?) -> Void) {
+        let param: [String: Any] = [
+            "id": id
+        ]
+        request(APIEndpoint.deleteJD.getURL(), method: .post, parameters: param) { response in
+            switch response.result {
+            case .success:
+                completionHandler(nil)
+            case .failure:
+                completionHandler(response.error)
+            }
+        }
+    }
+    
+    func requestCreateJD(idPosition: Int, description: String, noOfJobs: Int, dueDate: String, completionHandler: @escaping (Error?) -> Void) {
+        let parameters: [String: Any] = [
+            "idPosition": idPosition,
+            "description": description,
+            "noOfJobs": noOfJobs,
+            "dueDate": dueDate
+        ]
+        request(APIEndpoint.createJD.getURL(), method: .post, parameters: parameters) { response in
+            switch response.result {
+            case .success:
+                completionHandler(nil)
+            case .failure:
+                completionHandler(response.error)
+            }
+        }
+    }
+    
+    func requestUpdateJD(id: Int, idPosition: Int, description: String, noOfJobs: Int, dueDate: String, completionHandler: @escaping (Error?) -> Void) {
+        let parameters: [String: Any] = [
+            "id": id,
+            "idPosition": idPosition,
+            "description": description,
+            "noOfJobs": noOfJobs,
+            "dueDate": dueDate
+        ]
+        request(APIEndpoint.updateJD.getURL(), method: .post, parameters: parameters) { response in
+            switch response.result {
+            case .success:
+                completionHandler(nil)
+            case .failure:
+                completionHandler(response.error)
+            }
+        }
+    }
+
     func requestBasicInfoCV(id: String, completionHandler: @escaping ([CVInfo]?, Error?) -> Void) {
         request(APIEndpoint.cvBasicInfo.getURL() + id,
                 method: .get) { response in

@@ -37,7 +37,6 @@ class LoginViewController: UIViewController {
                     guard let homeViewController = homeStoryboard.instantiateViewController(withIdentifier: "homeViewController") as? HomeViewController else {
                         return
                     }
-                    homeViewController.userEmail = mSelf.emailTextField.text ?? kEmptyStr
                     homeViewController.modalPresentationStyle = .fullScreen
                     mSelf.present(homeViewController, animated: true)
                 }

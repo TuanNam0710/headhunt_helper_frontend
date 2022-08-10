@@ -17,6 +17,11 @@ class HomeViewModel {
         let requestLogout = ValueTrigger<String>(kEmptyStr)
         let requestAllRecruiters = ValueTrigger<Void>(Void())
         let requestAllDepts = ValueTrigger<Void>(Void())
+        let requestAllJDs = ValueTrigger<Void>(Void())
+        let requestAllPositions = ValueTrigger<Void>(Void())
+        let requestDeleteJD = ValueTrigger<Int?>(nil)
+        let requestCreateJD = ValueTrigger<(Int, String, Int, String)>((-1, "", -1, ""))
+        let requestUpdateJD = ValueTrigger<(Int, Int, String, Int, String)>((-1, -1, "", -1, ""))
     }
     
     struct Output {
@@ -29,16 +34,17 @@ class HomeViewModel {
         let requestLogoutFailed = ValueTrigger<Void>(Void())
         let requestAllRecruitersSuccess = ValueTrigger<[RecruiterInfo]?>(nil)
         let requestAllDeptsSuccess = ValueTrigger<[Department]?>(nil)
+        let requestAllJDSuccess = ValueTrigger<[JobDescription]?>(nil)
+        let requestAllPositionsSuccess = ValueTrigger<[Position]?>(nil)
+        let requestDeleteJDSuccess = ValueTrigger<Void>(Void())
+        let requestCreateJDSuccess = ValueTrigger<Void>(Void())
+        let requestUpdateJDSuccess = ValueTrigger<Void>(Void())
     }
     
     let input = Input()
     let output = Output()
     
     func transform() {
-        input.getUserInfo.addObserver { [weak self] email in
-            guard let mSelf = self else { return }
-            mSelf.getUserInfo(email: email)
-        }
         input.getAllCV.addObserver { [weak self] in
             guard let mSelf = self else { return }
             mSelf.getAllCV()
@@ -59,16 +65,34 @@ class HomeViewModel {
             guard let mSelf = self else { return }
             mSelf.getAllDepts()
         }
-    }
-    
-    private func getUserInfo(email: String) {
-        apiServices.requestUserInfo(email: email) { [weak self] recruiterInfo, error in
+        input.requestAllJDs.addObserver { [weak self] in
             guard let mSelf = self else { return }
-            if error != nil {
-                mSelf.output.getUserInfoFailed.value = error
-            } else {
-                mSelf.output.getUserInfoSuccess.value = recruiterInfo
+            mSelf.getAllJD()
+        }
+        input.requestAllPositions.addObserver { [weak self] in
+            guard let mSelf = self else { return }
+            mSelf.getAllPosition()
+        }
+        input.requestDeleteJD.addObserver { [weak self] id in
+            guard let mSelf = self else { return }
+            if let id = id {
+                mSelf.deleteJD(id: id)
             }
+        }
+        input.requestCreateJD.addObserver { [weak self] (idPosition, description, noOfJobs, dueDate) in
+            guard let mSelf = self else { return }
+            mSelf.createJD(idPosition: idPosition,
+                           description: description,
+                           noOfJobs: noOfJobs,
+                           dueDate: dueDate)
+        }
+        input.requestUpdateJD.addObserver { [weak self] (id, idPosition, description, noOfJobs, dueDate) in
+            guard let mSelf = self else { return }
+            mSelf.updateJD(id: id,
+                           idPosition: idPosition,
+                           description: description,
+                           noOfJobs: noOfJobs,
+                           dueDate: dueDate)
         }
     }
     
@@ -103,7 +127,7 @@ class HomeViewModel {
         apiServices.requestAllRecruiters { [weak self] recruiterList, error in
             guard let mSelf = self else { return }
             if error == nil {
-                mSelf.output.requestAllRecruitersSuccess.value = recruiterList
+                mSelf.output.requestAllRecruitersSuccess.value = recruiterList?.filter { $0.idDepartment == 6 }
             }
         }
     }
@@ -113,6 +137,60 @@ class HomeViewModel {
             guard let mSelf = self else { return }
             if error == nil {
                 mSelf.output.requestAllDeptsSuccess.value = departmentList
+            }
+        }
+    }
+    
+    private func getAllJD() {
+        apiServices.requestJD { jdList, error in
+            if error == nil {
+                self.output.requestAllJDSuccess.value = jdList
+            }
+        }
+    }
+    
+    private func getAllPosition() {
+        apiServices.requestPosition { positionList, error in
+            if error == nil {
+                self.output.requestAllPositionsSuccess.value = positionList
+            }
+        }
+    }
+    
+    private func deleteJD(id: Int) {
+        apiServices.requestDeleteJD(id: id) { error in
+            if error == nil {
+                self.output.requestDeleteJDSuccess.value = Void()
+            }
+        }
+    }
+    
+    private func createJD(idPosition: Int,
+                          description: String,
+                          noOfJobs: Int,
+                          dueDate: String) {
+        apiServices.requestCreateJD(idPosition: idPosition,
+                                    description: description,
+                                    noOfJobs: noOfJobs,
+                                    dueDate: dueDate) { error in
+            if error == nil {
+                self.output.requestCreateJDSuccess.value = Void()
+            }
+        }
+    }
+    
+    private func updateJD(id: Int,
+                          idPosition: Int,
+                          description: String,
+                          noOfJobs: Int,
+                          dueDate: String) {
+        apiServices.requestUpdateJD(id: id,
+                                    idPosition: idPosition,
+                                    description: description,
+                                    noOfJobs: noOfJobs,
+                                    dueDate: dueDate) { error in
+            if error == nil {
+                self.output.requestUpdateJDSuccess.value = Void()
             }
         }
     }
