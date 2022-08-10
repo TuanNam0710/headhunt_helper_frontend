@@ -21,7 +21,7 @@ class JDTableViewCell: UITableViewCell {
             .day(.twoDigits)
             .month(.twoDigits)
             .year(.twoDigits)
-            .locale(.current))
+            .locale(Locale(identifier: "vi-VN")))
         if Date().timeIntervalSince1970 < TimeInterval(dueDate) {
             self.backgroundColor = .white
         } else {

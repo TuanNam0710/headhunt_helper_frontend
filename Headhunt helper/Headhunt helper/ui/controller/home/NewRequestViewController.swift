@@ -126,6 +126,10 @@ class NewRequestViewController: UIViewController {
             self.present(alert, animated: true)
         }
     }
+    
+    @IBAction private func onBack(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
 }
 
 extension NewRequestViewController: UITextFieldDelegate {
