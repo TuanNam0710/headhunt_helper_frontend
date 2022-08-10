@@ -6,13 +6,19 @@
 //
 
 import UIKit
+import DropDown
 
 class RegisterViewController: UIViewController {
+    @IBOutlet private weak var departmentButton: UIButton!
     @IBOutlet private weak var nameTextField: UITextField!
     @IBOutlet private weak var emailTextField: UITextField!
     @IBOutlet private weak var passwordTextField: UITextField!
     @IBOutlet private weak var retypePasswordTextField: UITextField!
     private let viewModel = RegisterViewModel()
+    private let departmentDropdown = DropDown()
+    private var deptDataSource: [String] = []
+    private var currentDepartment: Int?
+    private var role = "Manager"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +27,14 @@ class RegisterViewController: UIViewController {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         retypePasswordTextField.delegate = self
+        departmentDropdown.anchorView = departmentButton
+        departmentDropdown.selectionAction = { (index: Int, itemName: String) in
+            self.departmentButton.setTitle(itemName, for: .normal)
+            if itemName == "Human Resources Dept" {
+                self.role = "Recruiter"
+            }
+            self.currentDepartment = index + 1
+        }
     }
     
     private func bindModel() {
@@ -45,6 +59,13 @@ class RegisterViewController: UIViewController {
             alert.addAction(action)
             mSelf.present(alert, animated: true)
         }
+        viewModel.output.requestGetAllDepartmentsSuccess.addObserver { deptList in
+            for dept in deptList {
+                self.deptDataSource.append(dept.name)
+            }
+            self.departmentDropdown.dataSource = self.deptDataSource
+        }
+        viewModel.input.requestGetAllDepartments.value = Void()
     }
     
     private func validateField(_ pass1: String, _ pass2: String) -> Bool {
@@ -58,8 +79,9 @@ class RegisterViewController: UIViewController {
            email != kEmptyStr,
            let password = passwordTextField.text,
            let retypePassword = retypePasswordTextField.text,
-           validateField(password, retypePassword) {
-            viewModel.input.requestRegister.value = (name, email, password)
+           validateField(password, retypePassword),
+           let currentDepartment = currentDepartment {
+            viewModel.input.requestRegister.value = (name, email, password, currentDepartment, role)
         } else {
             let alert = UIAlertController(title: "Error!", message: "Please enter again", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .cancel) { _ in
@@ -72,6 +94,10 @@ class RegisterViewController: UIViewController {
     
     @IBAction private func onLogin(_ sender: UIButton) {
         self.dismiss(animated: true)
+    }
+    
+    @IBAction private func onSelectDept(_ sender: UIButton) {
+        departmentDropdown.show()
     }
 }
 

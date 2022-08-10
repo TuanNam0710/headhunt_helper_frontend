@@ -28,7 +28,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ab-iw-F1R">
-                                <rect key="frame" x="20" y="244" width="374" height="25"/>
+                                <rect key="frame" x="20" y="264" width="374" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Zeb-uI-UpT"/>
                                 </constraints>
@@ -37,7 +37,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField toolTip="Please enter your name" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kk3-S9-tiD" userLabel="Name Text Field">
-                                <rect key="frame" x="20" y="279" width="374" height="40"/>
+                                <rect key="frame" x="20" y="299" width="374" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="0cD-vp-Re6"/>
                                 </constraints>
@@ -46,7 +46,7 @@
                                 <textInputTraits key="textInputTraits" textContentType="name"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hU6-8A-OP2">
-                                <rect key="frame" x="20" y="329" width="374" height="25"/>
+                                <rect key="frame" x="20" y="349" width="374" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="khc-8Z-dza"/>
                                 </constraints>
@@ -55,7 +55,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField toolTip="Please enter your email address" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="r0V-wO-i1d" userLabel="Email Text Field">
-                                <rect key="frame" x="20" y="364" width="374" height="40"/>
+                                <rect key="frame" x="20" y="384" width="374" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="zKA-V5-UVi"/>
                                 </constraints>
@@ -64,7 +64,7 @@
                                 <textInputTraits key="textInputTraits" textContentType="email"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P34-Cd-aqW">
-                                <rect key="frame" x="20" y="414" width="374" height="25"/>
+                                <rect key="frame" x="20" y="434" width="374" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="wUN-Jd-FRL"/>
                                 </constraints>
@@ -73,7 +73,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField toolTip="Please enter your password" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0zb-jc-saE" userLabel="Password Text Field">
-                                <rect key="frame" x="20" y="449" width="374" height="40"/>
+                                <rect key="frame" x="20" y="469" width="374" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="KLO-5m-a4I"/>
                                 </constraints>
@@ -82,7 +82,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="new-password"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Retype Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpp-wu-13B">
-                                <rect key="frame" x="20" y="499" width="374" height="25"/>
+                                <rect key="frame" x="20" y="519" width="374" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Ufr-Xo-NHp"/>
                                 </constraints>
@@ -91,7 +91,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField toolTip="Please enter your password again" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="I4v-nf-0rq" userLabel="Retype Password Text Field">
-                                <rect key="frame" x="20" y="534" width="374" height="40"/>
+                                <rect key="frame" x="20" y="554" width="374" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="D9P-cg-XJe"/>
                                 </constraints>
@@ -127,7 +127,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NcT-sE-3X2">
-                                <rect key="frame" x="113.5" y="604" width="187" height="50"/>
+                                <rect key="frame" x="113.5" y="624" width="187" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="OUf-rr-Scr"/>
@@ -140,12 +140,27 @@
                                     <action selector="onRegister:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="4IO-FD-VET"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="56n-eP-aKH" userLabel="Department Dropdown">
+                                <rect key="frame" x="20" y="214" width="374" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="fap-Di-fFe"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Choose your department">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="onSelectDept:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="XxO-lK-ghI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="I4v-nf-0rq" secondAttribute="trailing" constant="20" id="26O-gP-B7d"/>
                             <constraint firstItem="hU6-8A-OP2" firstAttribute="top" secondItem="Kk3-S9-tiD" secondAttribute="bottom" constant="10" id="3HA-4C-cW3"/>
+                            <constraint firstItem="56n-eP-aKH" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="3Np-4D-WAK"/>
                             <constraint firstItem="r0V-wO-i1d" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="5Bl-U5-IAJ"/>
                             <constraint firstItem="r0V-wO-i1d" firstAttribute="top" secondItem="hU6-8A-OP2" secondAttribute="bottom" constant="10" id="8mJ-66-W69"/>
                             <constraint firstItem="Kk3-S9-tiD" firstAttribute="top" secondItem="5Ab-iw-F1R" secondAttribute="bottom" constant="10" id="9Ag-3O-VC3"/>
@@ -159,6 +174,7 @@
                             <constraint firstItem="P34-Cd-aqW" firstAttribute="top" secondItem="r0V-wO-i1d" secondAttribute="bottom" constant="10" id="M6B-DH-ggc"/>
                             <constraint firstItem="0zb-jc-saE" firstAttribute="top" secondItem="P34-Cd-aqW" secondAttribute="bottom" constant="10" id="MBN-fe-MPm"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Kk3-S9-tiD" secondAttribute="trailing" constant="20" id="NQ0-ba-pYD"/>
+                            <constraint firstItem="5Ab-iw-F1R" firstAttribute="top" secondItem="56n-eP-aKH" secondAttribute="bottom" constant="10" id="Ngr-ZF-tWv"/>
                             <constraint firstItem="gKZ-3S-vNO" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="QVc-ZK-MDH"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="5Ab-iw-F1R" secondAttribute="trailing" constant="20" id="UK0-Pe-3ZW"/>
                             <constraint firstItem="NcT-sE-3X2" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="UWh-gY-7vr"/>
@@ -169,17 +185,20 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="r0V-wO-i1d" secondAttribute="trailing" constant="20" id="b4h-nc-eI1"/>
                             <constraint firstAttribute="trailing" secondItem="1dD-FP-CuP" secondAttribute="trailing" id="bdn-wv-JZD"/>
                             <constraint firstItem="hU6-8A-OP2" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="biG-ku-opj"/>
+                            <constraint firstItem="56n-eP-aKH" firstAttribute="top" secondItem="1dD-FP-CuP" secondAttribute="bottom" constant="20" id="dXv-44-D6K"/>
                             <constraint firstItem="0zb-jc-saE" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="gZD-3S-ksf"/>
                             <constraint firstAttribute="trailing" secondItem="P34-Cd-aqW" secondAttribute="trailing" constant="20" id="i6G-er-beE"/>
+                            <constraint firstItem="56n-eP-aKH" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="nzj-O8-Y4T"/>
                             <constraint firstItem="1dD-FP-CuP" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="50" id="oTC-BD-Imj"/>
                             <constraint firstItem="NcT-sE-3X2" firstAttribute="width" secondItem="r0V-wO-i1d" secondAttribute="width" multiplier="0.5" id="oq0-R3-8cI"/>
                             <constraint firstItem="P34-Cd-aqW" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="qO6-va-DjJ"/>
                             <constraint firstItem="I4v-nf-0rq" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="20" id="tcs-bG-BJO"/>
-                            <constraint firstItem="5Ab-iw-F1R" firstAttribute="top" secondItem="1dD-FP-CuP" secondAttribute="bottom" constant="50" id="vep-ir-bdI"/>
+                            <constraint firstAttribute="trailing" secondItem="56n-eP-aKH" secondAttribute="trailing" constant="20" id="uLu-Si-0TP"/>
                             <constraint firstItem="Kpp-wu-13B" firstAttribute="top" secondItem="0zb-jc-saE" secondAttribute="bottom" constant="10" id="yWZ-e3-KLs"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="departmentButton" destination="56n-eP-aKH" id="M7n-yu-b1t"/>
                         <outlet property="emailTextField" destination="r0V-wO-i1d" id="8Lh-dH-p4h"/>
                         <outlet property="nameTextField" destination="Kk3-S9-tiD" id="wBA-Ot-0hI"/>
                         <outlet property="passwordTextField" destination="0zb-jc-saE" id="H0I-Rr-yBS"/>

@@ -17,7 +17,7 @@ class DetailViewController: UIViewController {
     @IBOutlet private weak var detailPageControl: UIPageControl!
     private var swipeLeftGesture = UISwipeGestureRecognizer()
     private var swipeRightGesture = UISwipeGestureRecognizer()
-    var idCV = 0
+    var idCV = -1
     var recruiterList: [RecruiterInfo] = []
     var departmentList: [Department] = []
     private let assignToHRDD = DropDown()
@@ -33,6 +33,9 @@ class DetailViewController: UIViewController {
             assignToDeptDD.dataSource = deptDataSource
         }
     }
+    private var statusDisplay: [String] = [
+        "Waiting", "Processing", "Passed", "Failed"
+    ]
     private var statusDataSource: [String] = [
         "Waiting", "Processing", "Passed", "Failed"
     ]
@@ -49,6 +52,7 @@ class DetailViewController: UIViewController {
     private var currentSelectRecruiterId: Int?
     private var currentSelectDeptId: Int?
     private var currentSelectStatus: Int?
+    private var cvDetail: CVDetail?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -70,47 +74,40 @@ class DetailViewController: UIViewController {
         for department in departmentList {
             deptDataSource.append(department.name)
         }
+        let currentRole = SharedPreference.shared.getString(key: kRole)
+        let currentDeptId = Int(SharedPreference.shared.getString(key: kCurrentDept)) ?? -1
+        if currentRole == "Manager" {
+            deptDataSource.removeAll()
+            for department in departmentList {
+                if department.id == currentDeptId || department.id == 6 {
+                    deptDataSource.append(department.name)
+                }
+            }
+        }
         viewModel.transform()
-        viewModel.output.requestGetCVBasicInfoSuccess.addObserver { [weak self] cvBasicInfo in
+        viewModel.output.requestGetDetailCVSuccess.addObserver { [weak self] cvDetail in
             guard let mSelf = self else { return }
-            mSelf.cvBasicInfo = cvBasicInfo
-            mSelf.detailTableView.reloadData()
+            mSelf.nameLabel.text = cvDetail?.basicInfo.name
+            mSelf.cvDetail = cvDetail
+            mSelf.cvBasicInfo = cvDetail?.basicInfo
+            mSelf.cvSkill = cvDetail?.skill
+            mSelf.cvWorkExperience = cvDetail?.workExperience
+            mSelf.cvAdditionalInfo = cvDetail?.additionalInfo
             mSelf.setupViews()
-        }
-        viewModel.output.requestGetCVSkillsSuccess.addObserver { [weak self] cvSkill in
-            guard let mSelf = self else { return }
-            mSelf.cvSkill = cvSkill
             mSelf.detailTableView.reloadData()
         }
-        viewModel.output.requestGetCVWorkExperienceSuccess.addObserver { [weak self] cvWorkExperience in
+        viewModel.output.requestUpdateCVDetailSuccess.addObserver { [weak self] _ in
             guard let mSelf = self else { return }
-            mSelf.cvWorkExperience = cvWorkExperience
-            mSelf.detailTableView.reloadData()
+            let alert = UIAlertController(title: "Success", message: nil, preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+                alert.dismiss(animated: true) {
+                    mSelf.dismiss(animated: true)
+                }
+            }
+            alert.addAction(action)
+            mSelf.present(alert, animated: true)
         }
-        viewModel.output.requestGetCVAdditionalInfoSuccess.addObserver { [weak self] cvAdditionalInfo in
-            guard let mSelf = self else { return }
-            mSelf.cvAdditionalInfo = cvAdditionalInfo
-            mSelf.detailTableView.reloadData()
-        }
-        viewModel.output.requestAssignCVRecruiterSuccess.addObserver { [weak self] in
-            guard let mSelf = self else { return }
-            mSelf.assignRecruiterFlag = true
-            mSelf.didFinishLoadAPISave()
-        }
-        viewModel.output.requestAssignCVDeptSuccess.addObserver { [weak self] in
-            guard let mSelf = self else { return }
-            mSelf.assignDeptFlag = true
-            mSelf.didFinishLoadAPISave()
-        }
-        viewModel.output.requestUpdateCVStatusSuccess.addObserver { [weak self] in
-            guard let mSelf = self else { return }
-            mSelf.updateStatusFlag = true
-            mSelf.didFinishLoadAPISave()
-        }
-        viewModel.input.requestGetCVBasicInfo.value = "\(idCV)"
-        viewModel.input.requestGetCVSkills.value = "\(idCV)"
-        viewModel.input.requestGetCVWorkExperience.value = "\(idCV)"
-        viewModel.input.requestGetCVAdditionalInfo.value = "\(idCV)"
+        viewModel.input.requestGetDetailCV.value = "\(idCV)"
     }
     
     private func setupTableView() {
@@ -144,6 +141,8 @@ class DetailViewController: UIViewController {
     }
     
     private func setupDropDown() {
+        let currentRole = SharedPreference.shared.getString(key: kRole)
+        let currentDeptId = Int(SharedPreference.shared.getString(key: kCurrentDept)) ?? -1
         assignToHRDD.anchorView = assignToHRButton
         assignToHRDD.dataSource = hrDataSource
         assignToHRDD.dismissMode = .automatic
@@ -152,21 +151,36 @@ class DetailViewController: UIViewController {
             self.assignToHRButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
-        
+        if currentRole == "Manager" {
+            deptDataSource.removeAll()
+            for department in departmentList {
+                if department.id == currentDeptId || department.id == 6 {
+                    deptDataSource.append(department.name)
+                }
+            }
+        }
         assignToDeptDD.anchorView = assignToDeptButton
         assignToDeptDD.dataSource = deptDataSource
         assignToDeptDD.dismissMode = .automatic
         assignToDeptDD.selectionAction = { [unowned self] (index: Int, item: String) in
-            self.currentSelectDeptId = departmentList[index].id
+            for department in departmentList {
+                if department.name == item {
+                    self.currentSelectDeptId = department.id
+                }
+            }
             self.assignToDeptButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
-        
+        if currentRole == "Manager" {
+            statusDataSource = ["Passed", "Failed"]
+        } else {
+            statusDataSource = ["Waiting", "Processing"]
+        }
         changeStatusDD.anchorView = changeStatusButton
         changeStatusDD.dataSource = statusDataSource
         changeStatusDD.dismissMode = .automatic
         changeStatusDD.selectionAction = { [unowned self] (index: Int, item: String) in
-            self.currentSelectStatus = index
+            self.currentSelectStatus = currentRole == "Manager" ? index + 2 : index
             self.changeStatusButton.setTitle(item, for: .normal)
             self.detailTableView.reloadData()
         }
@@ -186,7 +200,7 @@ class DetailViewController: UIViewController {
             }
         }
         if let cvBasicInfo = cvBasicInfo {
-            changeStatusButton.setTitle(statusDataSource[cvBasicInfo.status], for: .normal)
+            changeStatusButton.setTitle(statusDisplay[cvBasicInfo.status], for: .normal)
             currentSelectStatus = cvBasicInfo.status
         }
         cvMail = cvBasicInfo?.email ?? kEmptyStr
@@ -227,6 +241,9 @@ class DetailViewController: UIViewController {
     }
     
     @IBAction private func onSelectHR(_ sender: UIButton) {
+        guard SharedPreference.shared.getString(key: kRole) == "Recruiter" else {
+            return
+        }
         assignToHRDD.show()
     }
     
@@ -242,19 +259,10 @@ class DetailViewController: UIViewController {
         if let currentSelectRecruiterId = currentSelectRecruiterId,
            let currentSelectDeptId = currentSelectDeptId,
            let currentSelectStatus = currentSelectStatus {
-            viewModel.input.requestAssignCVRecruiter.value = ("\(idCV)", "\(currentSelectRecruiterId)")
-            viewModel.input.requestAssignCVDept.value = ("\(idCV)", "\(currentSelectDeptId)")
-            viewModel.input.requestUpdateCVStatus.value = ("\(idCV)", "\(currentSelectStatus)")
-        }
-    }
-    
-    private func didFinishLoadAPISave() {
-        if assignRecruiterFlag && assignDeptFlag && updateStatusFlag {
-            let alert = UIAlertController(title: "Success!", message: "Update CV successfully", preferredStyle: .alert)
-            let action = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                guard let mSelf = self else { return }
-                mSelf.dismiss(animated: true)
-            }
+            viewModel.input.requestUpdateCVDetail.value = (idCV, currentSelectDeptId, currentSelectRecruiterId, currentSelectStatus)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Please fill all fields before sending!", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .cancel)
             alert.addAction(action)
             self.present(alert, animated: true)
         }
@@ -262,8 +270,27 @@ class DetailViewController: UIViewController {
 }
 
 extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch detailPageControl.currentPage {
+        case 0:
+            return "Basic Info"
+        case 1:
+            return "Work Experience"
+        case 2:
+            return "Skill"
+        case 3:
+            return "Additional Info"
+        default:
+            return ""
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -17,16 +17,11 @@ struct CVInfo: Decodable {
     var idRecruiter: Int?
     var status: Int
     var idDepartment: Int?
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case gender
-        case position
-        case email
-        case phone
-        case idRecruiter = "id_recruiter"
-        case status
-        case idDepartment = "id_department"
-    }
+}
+
+struct CVDetail: Decodable {
+    var basicInfo: CVInfo
+    var skill: [CVSkills]
+    var workExperience: [CVWorkExperience]
+    var additionalInfo: [CVAdditionalInfo]
 }

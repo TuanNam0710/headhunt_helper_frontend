@@ -15,12 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DropDown.startListeningToKeyboard()
-        let currentId = UserDefaults.standard.value(forKey: kUserId) as? Int
-        if let currentId = currentId {
-            UserDefaults.standard.set(nil, forKey: kUserId)
-            SecureDataHelper.shared.saveUserInfo(name: kEmptyStr, email: kEmptyStr)
-            APIServices.shared.requestLogout(id: "\(currentId)") { _ in }
-        }
+        let currentId = SharedPreference.shared.getString(key: kUserId)
+        UserDefaults.standard.set(nil, forKey: kUserId)
+        APIServices.shared.requestLogout(id: "\(currentId)") { _ in }
         return true
     }
 }
